@@ -4,6 +4,10 @@ from tkinter.ttk import *
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
+
+"""
+Code to set the size of the main window
+"""
 def center_window(root):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
@@ -12,32 +16,89 @@ def center_window(root):
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     root.geometry('%dx%d+%d+%d' % (width, height, x, y))
+
+
+"""
+This code is for getting the directory
+"""
 def get_directory():
     dirname = filedialog.askdirectory()
     if dirname:
-        directory.set(dirname)
-def input_file(status,name):
-    optionframe = Frame(root)
-    optionlabel = Label(optionframe,text=name)
-    optionlabel.pack(side=LEFT)
-    text = status
-    directory = StringVar(root)
-    directory.set(text)
-    entry = Entry(optionframe,textvariable = directory)
-    entry.pack(side=LEFT)
-    optionframe.pack()
-    return entry, directory
+        directory.set(dirname) # sets the value of directory stringvar
 def print_entry():
-    print (directory.get())
+    print(directory.get())
+def input_directory(status,name):
+    directorylabel = ttk.Label(directoryframe, text=name)  # sets the name to the left of the entrybox
+    directorylabel.pack(side=LEFT)
+    text = status  # setting the blank as the default value of the entry box
+    directory = StringVar(directoryframe)
+    directory.set(text)
+    entry = ttk.Entry(directoryframe,textvariable = directory)  # this is the textbox
+    entry.pack(side=LEFT)
+    return directory
+
+def print_altitude():
+    print(altitude.get())
+def input_altitude(status,name):
+    altitudelabel = ttk.Label(altitudeframe, text=name)
+    altitudelabel.pack(side=LEFT)
+    altitude = DoubleVar(altitudeframe)
+    entry = ttk.Entry(altitudeframe,textvariable=altitude)
+    entry.pack(side=LEFT)
+    return altitude
+
+
+def print_threshold():
+    print(threshold.get())
+def input_threshold(status,name):
+    thresholdlabel = ttk.Label(thresholdframe, text=name)
+    thresholdlabel.pack(side=LEFT)
+    threshold = DoubleVar(thresholdframe)
+    entry = ttk.Entry(thresholdframe,textvariable=threshold)
+    entry.pack(side=LEFT)
+    note = ttk.Label(thresholdframe,text="(Values should be between 0.0-1.0")
+    note.pack(side=LEFT)
+    return threshold
+
+
 root = Tk()
 root.title("EcoCensus")
 center_window(root)
-button = Button(root,text="ask directory", command = get_directory)
+"""
+This sections is to get the directory
+"""
+directoryframe = Frame(root) # frame to get the directory values
+button = ttk.Button(directoryframe,text="Get Directory", command=get_directory)
 button.pack(side=RIGHT)
-getbutton = Button(root,text='Print entry text', command = print_entry)
-getbutton.pack(side = BOTTOM)
-#TODO: Find all the .py files and connectors in the original Ecocensus project
-#TODO: By connectors I mean things like
-entry,directory = input_file("","directory")
+getbutton = ttk.Button(root,text='Print entry text', command=print_entry)  # this gets removed later.
+getbutton.pack(side=BOTTOM)
+directory = input_directory("", "Directory")
+directoryframe.pack(side=TOP)
+"""
+This section is to get the altitude
+"""
+altitudeframe = Frame(root)
+altitude = input_altitude("", "Altitude")
+altitudebutton = ttk.Button(root, text='Print Altitude value', command=print_altitude )
+altitudebutton.pack(side=BOTTOM)
+altitudeframe.pack(side=TOP)
+
+"""
+This section is to get the prediction threshold 
+"""
+thresholdframe = Frame(root)
+threshold = input_threshold("", "Prediction Threshold")
+thresholdbutton = ttk.Button(root, text='Print Threshold value', command=print_threshold)
+thresholdbutton.pack(side=BOTTOM)
+thresholdframe.pack(side=TOP)
 root.mainloop()
 root.withdraw()
+
+
+# split the ui into frames, top frame should be the predict button and variables
+
+# side frame should be where you can see the images that have been predicted on
+
+# then the other side frame should be the partioned image like how they have it in ecocensus
+
+# learn how to switch ui tabs as well
