@@ -20,6 +20,7 @@ def center_window(root):
 
 """
 This code is for getting the directory
+print function removed later
 """
 def get_directory():
     dirname = filedialog.askdirectory()
@@ -36,6 +37,10 @@ def input_directory(status,name):
     entry = ttk.Entry(directoryframe,textvariable = directory)  # this is the textbox
     entry.pack(side=LEFT)
     return directory
+"""
+This code is for getting the altitude
+print function removed late 
+"""
 
 def print_altitude():
     print(altitude.get())
@@ -79,7 +84,7 @@ This section is to get the altitude
 """
 altitudeframe = Frame(root)
 altitude = input_altitude("", "Altitude")
-altitudebutton = ttk.Button(root, text='Print Altitude value', command=print_altitude )
+altitudebutton = ttk.Button(root, text='Print Altitude value', command=print_altitude )  # this also gets removed late
 altitudebutton.pack(side=BOTTOM)
 altitudeframe.pack(side=TOP)
 
@@ -88,9 +93,10 @@ This section is to get the prediction threshold
 """
 thresholdframe = Frame(root)
 threshold = input_threshold("", "Prediction Threshold")
-thresholdbutton = ttk.Button(root, text='Print Threshold value', command=print_threshold)
+thresholdbutton = ttk.Button(root, text='Print Threshold value', command=print_threshold)  # this also gets removed
 thresholdbutton.pack(side=BOTTOM)
 thresholdframe.pack(side=TOP)
+
 root.mainloop()
 root.withdraw()
 
