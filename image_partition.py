@@ -15,20 +15,18 @@ def main(directorys):
     directory = os.path.dirname(directorys + '/Partitions/') #/Users/bound_to_love/Downloads/Test02142018/Partitions/')
     if os.path.exists(directory):
         print ("Directory already exists")
-
     if not os.path.exists(directory):
         os.makedirs(str(directory))
         print ("Directory made for partitions")
-
     f = open(str(directory) + "/Drone_coords.txt", "w+")
     files = os.listdir(rootdir)
     for file in files:
         if ".JPG" or ".jpg" in file:
-            image = Image.open(str(rootdir + '/' + file))
+            image = Image.open(str(rootdir + file))
             exif_data = gll.get_exif_data(image)
             dir, lat, lon = gll.get_lat_lon(exif_data)
             f.write((file + " " + str(dir) + " "+ str(lat) + " " + str(lon) + " " + str(image.size[0]) + " " + str(image.size[1])) + str("\n"))
-            imgPartition = cv2.imread(rootdir + "/" + file)
+            imgPartition = cv2.imread(rootdir + file)
             x, y, c = imgPartition.shape
             xp = len(str(x))
             yp = len(str(y))
