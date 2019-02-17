@@ -13,15 +13,14 @@ import scipy.cluster
 def main(directorys):
     rootdir = directorys +'/' #'/Users/bound_to_love/Downloads/Test02142018'
     directory = os.path.dirname(directorys + '/Partitions/') #/Users/bound_to_love/Downloads/Test02142018/Partitions/')
-    os.makedirs(str(directory) + '/Partitions/')
-    f = open(str(directory) + "/Drone_coords.txt", "w+")
     if os.path.exists(directory):
         print ("Directory already exists")
 
     if not os.path.exists(directory):
-        os.makedirs(str(directory) + '/Partitions/')
+        os.makedirs(str(directory))
         print ("Directory made for partitions")
 
+    f = open(str(directory) + "/Drone_coords.txt", "w+")
     files = os.listdir(rootdir)
     for file in files:
         if ".JPG" in file:
