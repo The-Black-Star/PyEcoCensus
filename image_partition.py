@@ -10,15 +10,16 @@ import scipy
 import scipy.misc
 import scipy.cluster
 
-def main():
-    rootdir = sys.argv[1] + '/' #'/Users/bound_to_love/Downloads/Test02142018'
-    directory = os.path.dirname(sys.argv[2] + '/Partitions/') #/Users/bound_to_love/Downloads/Test02142018/Partitions/')
-    f = open(str(sys.argv[2]) + "/Drone_coords.txt", "w+")
+def main(directorys):
+    rootdir = directorys +'/' #'/Users/bound_to_love/Downloads/Test02142018'
+    directory = os.path.dirname(directorys + '/Partitions/') #/Users/bound_to_love/Downloads/Test02142018/Partitions/')
+    os.makedirs(str(directory) + '/Partitions/')
+    f = open(str(directory) + "/Drone_coords.txt", "w+")
     if os.path.exists(directory):
         print ("Directory already exists")
 
     if not os.path.exists(directory):
-        os.makedirs(directory)
+        os.makedirs(str(directory) + '/Partitions/')
         print ("Directory made for partitions")
 
     files = os.listdir(rootdir)

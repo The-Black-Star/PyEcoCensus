@@ -4,7 +4,7 @@ from tkinter.ttk import *
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
-
+import image_partition as impa
 """
 Code to set the size of the main window
 """
@@ -69,10 +69,12 @@ def input_threshold(status,name):
 root = Tk()
 root.title("EcoCensus")
 center_window(root)
+
+predictframe = Frame(root)
 """
 This sections is to get the directory
 """
-directoryframe = Frame(root) # frame to get the directory values
+directoryframe = Frame(predictframe) # frame to get the directory values
 button = ttk.Button(directoryframe,text="Get Directory", command=get_directory)
 button.pack(side=RIGHT)
 getbutton = ttk.Button(root,text='Print entry text', command=print_entry)  # this gets removed later.
@@ -82,7 +84,7 @@ directoryframe.pack(side=TOP)
 """
 This section is to get the altitude
 """
-altitudeframe = Frame(root)
+altitudeframe = Frame(predictframe)
 altitude = input_altitude("", "Altitude")
 altitudebutton = ttk.Button(root, text='Print Altitude value', command=print_altitude )  # this also gets removed late
 altitudebutton.pack(side=BOTTOM)
@@ -91,11 +93,19 @@ altitudeframe.pack(side=TOP)
 """
 This section is to get the prediction threshold 
 """
-thresholdframe = Frame(root)
+thresholdframe = Frame(predictframe)
 threshold = input_threshold("", "Prediction Threshold")
 thresholdbutton = ttk.Button(root, text='Print Threshold value', command=print_threshold)  # this also gets removed
 thresholdbutton.pack(side=BOTTOM)
 thresholdframe.pack(side=TOP)
+
+def partition_predict():
+    impa.main(directory.get())
+
+predictbutton = ttk.Button(predictframe,text='Partition and Predict', command=partition_predict)
+predictbutton.pack(side=TOP)
+predictframe.pack()
+
 
 root.mainloop()
 root.withdraw()
