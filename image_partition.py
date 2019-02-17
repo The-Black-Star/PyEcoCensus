@@ -23,7 +23,7 @@ def main(directorys):
     f = open(str(directory) + "/Drone_coords.txt", "w+")
     files = os.listdir(rootdir)
     for file in files:
-        if ".JPG" in file:
+        if ".JPG" or ".jpg" in file:
             image = Image.open(str(rootdir + '/' + file))
             exif_data = gll.get_exif_data(image)
             dir, lat, lon = gll.get_lat_lon(exif_data)
