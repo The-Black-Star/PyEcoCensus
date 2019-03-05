@@ -174,7 +174,8 @@ label = tk.Label(displayframe, image = photo,bg="white", borderwidth = 5, relief
 
 label.pack()
 """
-def positive_file(positive_files):
+def display_images():
+    positive_files = directory.get()+"/Positive"
     print(positive_files)
     image_over = 0
     files = os.listdir(positive_files)
@@ -194,12 +195,6 @@ def positive_file(positive_files):
                 #old_label_image.destroy()
             old_label_image = image1
             image_over = image_over + old_label_image.size[0]
-
-def display_images():
-    positive_files = directory.get()+"/Positive"
-    print(positive_files)
-    positive_file(positive_files)
-
 
 displaybutton = tk.Button(root, text='Display dat shit', command=display_images)
 displaybutton.pack(side=BOTTOM)
