@@ -1,4 +1,3 @@
-#!/user/bin/python3.5
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
