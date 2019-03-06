@@ -10,6 +10,7 @@ import scipy.misc
 import scipy.cluster
 
 def main(directorys):
+    print("entered image partition")
     rootdir = directorys +'/' #'/Users/bound_to_love/Downloads/Test02142018'
     directory = os.path.dirname(directorys + '/Partitions/') #/Users/bound_to_love/Downloads/Test02142018/Partitions/')
     if os.path.exists(directory):
@@ -46,6 +47,7 @@ def main(directorys):
                 i += 300
                 j = 0
     f.close()
+    print("leaving image partition")
 
 if __name__ == "__main__":
     main()

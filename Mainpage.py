@@ -6,8 +6,11 @@ import tkinter as tk
 from tkinter import filedialog
 import image_partition as impa
 import predictions as predict
+import imageReader as imread
 from PIL import Image, ImageTk
 import os, glob
+import time
+import shutil
 """
 Code to set the size of the main window
 """
@@ -21,6 +24,14 @@ def center_window(root):
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     root.geometry('%dx%d+%d+%d' % (width, height, x, y))
+
+
+"""
+Constants for setting button and label columns
+"""
+entrycol = 3
+labelcol = entrycol-1
+
 
 
 """
@@ -55,14 +66,16 @@ def print_entry():
     print(directory.get())
 
 
-def input_directory(status,name):
-    directorylabel = ttk.Label(directoryframe, text=name)  # sets the name to the left of the entrybox
-    directorylabel.pack(side=LEFT)
+def input_directory(status, name):
+    directorylabel = ttk.Label(root, text=name)  # sets the name to the left of the entrybox
+    directorylabel.grid(column = labelcol, row = 0, sticky = W)
+    #directorylabel.pack(side=LEFT)
     text = status  # setting the blank as the default value of the entry box
-    directory = StringVar(directoryframe)
+    directory = StringVar(root)
     directory.set(text)
-    entry = ttk.Entry(directoryframe,textvariable = directory)  # this is the textbox
-    entry.pack(side=LEFT)
+    entry = ttk.Entry(root, textvariable = directory)  # this is the textbox
+    #entry.pack(side=LEFT)
+    entry.grid(column = entrycol, row = 0)
     return directory
 
 
@@ -76,28 +89,33 @@ def print_altitude():
     print(altitude.get())
 
 
-def input_altitude(status,name):
-    altitudelabel = ttk.Label(altitudeframe, text=name)
-    altitudelabel.pack(side=LEFT)
-    altitude = DoubleVar(altitudeframe)
-    entry = ttk.Entry(altitudeframe,textvariable=altitude)
-    entry.pack(side=LEFT)
+def input_altitude(status, name):
+    altitudelabel = ttk.Label(root, text=name)
+    #altitudelabel.pack(side=LEFT)
+    altitudelabel.grid(column = labelcol, row = 1, sticky = W)
+    altitude = DoubleVar(root)
+    entry = ttk.Entry(root,textvariable=altitude)
+    #entry.pack(side=LEFT)
+    entry.grid(column = entrycol, row = 1)
     return altitude
 
 
 def print_threshold():
     print(threshold.get())
-    predict.main(directory.get())
+    #predict.main(directory.get())
 
 
-def input_threshold(status,name):
-    thresholdlabel = Label(thresholdframe, text=name)
-    thresholdlabel.pack(side=LEFT)
-    threshold = DoubleVar(thresholdframe)
-    entry = ttk.Entry(thresholdframe,textvariable=threshold)
-    entry.pack(side=LEFT)
-    note = ttk.Label(thresholdframe,text="(Values should be between 0.0-1.0)")
-    note.pack(side=LEFT)
+def input_threshold(status, name):
+    thresholdlabel = Label(root, text=name)
+    # thresholdlabel.pack(side=LEFT)
+    thresholdlabel.grid(column = labelcol,row = 2, sticky = W)
+    threshold = DoubleVar(root)
+    entry = ttk.Entry(root, textvariable=threshold)
+    #entry.pack(side=LEFT)
+    entry.grid(column = entrycol, row = 2)
+    note = ttk.Label(root, text="(Values should be between 0.0-1.0)")
+    #note.pack(side=LEFT)
+    note.grid(column = 21, row = 2, sticky = E)
     return threshold
 
 
@@ -107,44 +125,63 @@ style = ttk.Style()
 style.configure("BW.TLabel", foreground="black", background="white")
 center_window(root)
 root.configure(background = '#9DE9AF')
-predictframe = Frame(root)
+#root.columnconfigure()
+#predictframe = Frame(root)
 
 """
 This section is to get the directory
 """
-directoryframe = Frame(predictframe) # frame to get the directory values
-button = ttk.Button(directoryframe,text="Get Directory", command=get_directory)
-button.pack(side=RIGHT)
-getbutton = ttk.Button(root,text='Print entry text', command=print_entry)  # this gets removed later.
-getbutton.pack(side=BOTTOM)
+#directoryframe = Frame(predictframe) # frame to get the directory values
+button = ttk.Button(root, text="Get Directory", command=get_directory)
+button.grid(column = entrycol+1)
+#button.pack(side=RIGHT)
+getbutton = ttk.Button(root, text='Print entry text', command=print_entry)  # this gets removed later.
+getbutton.grid(column=0,row=10)
+#getbutton.pack(side=BOTTOM)
 directory = input_directory("", "Directory")
-directoryframe.pack(side=TOP)
+#directoryframe.pack(side=TOP)
 """
 This section is to get the altitude
 """
-altitudeframe = Frame(predictframe)
+#altitudeframe = Frame(predictframe)
 altitude = input_altitude("", "Altitude")
 altitudebutton = ttk.Button(root, text='Print Altitude value', command=print_altitude )  # this also gets removed late
-altitudebutton.pack(side=BOTTOM)
-altitudeframe.pack(side=TOP)
+altitudebutton.grid(column=0,row=11)
+#altitudebutton.pack(side=BOTTOM)
+#altitudeframe.pack(side=TOP)
 
 """
 This section is to get the prediction threshold 
 """
-thresholdframe = Frame(predictframe)
+#thresholdframe = Frame(predictframe)
 threshold = input_threshold("", "Prediction Threshold")
 thresholdbutton = ttk.Button(root, text='Print Threshold value', command=print_threshold)  # this also gets removed
-thresholdbutton.pack(side=BOTTOM)
-thresholdframe.pack(side=TOP)
+thresholdbutton.grid(column=0,row=12)
+#thresholdbutton.pack(side=BOTTOM)
+#thresholdframe.pack(side=TOP)
 
 
+"""
+This section is for using the model
+"""
 def partition_predict():
+    # calls image_partition.py, passing selected directory
     impa.main(directory.get())
-    #add the directory that will read the newly created partition files.
+    predict.main(directory.get(),threshold.get())
+    imread.main(directory.get(),altitude.get())
+    partdirectory = os.path.dirname(directory.get() + '/Partitions/')
+    negdirectory = os.path.dirname(directory.get() + "/Negative/")
+    posdirectory = os.path.dirname(directory.get() + "/Positive/")
+    os.rmdir(partdirectory)
+    shutil.rmtree(negdirectory)
+    now = time.gmtime()
+    os.rename(posdirectory,directory.get() +"/Positive"+ time.strftime("%Y-%m-%d_%H-%M-%S", now))
+    # add the directory that will read the newly created partition files.
 
 
-predictbutton = ttk.Button(predictframe,text='Partition and Predict', command=partition_predict)
-predictbutton.pack(side=TOP)
+predictbutton = ttk.Button(root,text='Partition and Predict', command=partition_predict)
+predictbutton.grid(column = entrycol, row = 4)
+#predictbutton.pack(side=TOP)
 
 """
 This section is for displaying partitioned images
@@ -161,9 +198,9 @@ imageframe.pack(side=TOP)
 """
 
 #def display_image():
-displayframe = Frame(root)
-print("Trying to display dat shit")
-imageframe = Frame(root)
+#displayframe = Frame(root)
+#print("Trying to display dat shit")
+#imageframe = Frame(root)
 """
 image = Image.open("C:\\Users\\Lindsey\\PycharmProjects\\untitled\\Images\\example.JPG")
 image = image.resize((800, 800), Image.ANTIALIAS)
@@ -179,8 +216,12 @@ def display_images():
     print(positive_files)
     image_over = 0
     files = os.listdir(positive_files)
+    row_num = 5
+    col_num = 0
     old_label_image = None
     for f in files:
+        print(image_over)
+        print("Image_over")
         if ".jpg" or ".JPG" in f:
             print(f)
             image1 = Image.open(positive_files + "/" + f)
@@ -188,19 +229,25 @@ def display_images():
             print(image1.size[0], image1.size[1])
             tkpi = ImageTk.PhotoImage(image1)
             label_image = tk.Label(root, image=tkpi)
+            if image_over == 1500:
+                col_num = 0
+                print("Image has passed the threshold")
+                label_image.grid(row=row_num+1, column = col_num)
             label_image.place(x=image_over, y= -15, width=image1.size[0], height=image1.size[1])
+
             root.title(f)
 
             #if old_label_image is not None:
-                #old_label_image.destroy()
+                 #old_label_image.destroy()
             old_label_image = image1
             image_over = image_over + old_label_image.size[0]
 
+
 displaybutton = tk.Button(root, text='Display dat shit', command=display_images)
-displaybutton.pack(side=BOTTOM)
-displayframe.pack(side=BOTTOM)
-imageframe.pack(side=TOP)
-predictframe.pack()
+#displaybutton.pack(side=BOTTOM)
+#displayframe.pack(side=BOTTOM)
+#imageframe.pack(side=TOP)
+#predictframe.pack()
 
 
 root.mainloop()

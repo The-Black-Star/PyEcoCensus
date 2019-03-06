@@ -10,8 +10,8 @@ import os,glob,cv2
 import sys,argparse
 import tensorflow as tf
 
-def main(directorys):
-    print("HEY FUCKBOI!")
+def main(directorys,threshold):
+    print("entered predictions")
     rootdir = os.path.dirname(directorys + '/Partitions/') #os.path.dirname('/Users/bound_to_love/Downloads/Test02142018/Partitions/')
     directory = os.path.dirname(directorys + '/')
     directory1 = os.path.dirname(directory + '/Positive/')
@@ -41,6 +41,7 @@ def main(directorys):
     print("Model found")
     # Step-2: Now let's load the weights saved using the restore method.
     #saver.restore(sess, tf.train.latest_checkpoint(sys.argv[0].replace("predictions.py","./")))
+    """Mark OS DOT PATH AND UPDATE THE PATH"""
     saver.restore(sess, "C:/Users/Lindsey/PycharmProjects/untitled/miconia-model20180307")
     #saver.restore(sess, "C:\\Users\\Lindsey\\PycharmProjects\\untitled\\miconia-model")
     print("Worked?")
@@ -87,12 +88,15 @@ def main(directorys):
                 # result is of this format [probabiliy_of_miconia probability_of_other]
                 miconia = result[count][0]
                 other = result[count][1]
-                if miconia > .2:
+                if miconia > threshold:
                     os.rename(rootdir + "/" + file, directory1+"/" + file)
+
                 else:
                     os.rename(rootdir + "/" + file, directory2+"/"+ file)
+
                 count += 1
 
         images = []
+    print("leaving predictions")
 if __name__ == "__main__":
     main()
