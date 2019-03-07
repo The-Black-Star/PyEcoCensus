@@ -42,7 +42,9 @@ def main(directorys,threshold):
     # Step-2: Now let's load the weights saved using the restore method.
     #saver.restore(sess, tf.train.latest_checkpoint(sys.argv[0].replace("predictions.py","./")))
     """Mark OS DOT PATH AND UPDATE THE PATH"""
-    saver.restore(sess, "C:/Users/Lindsey/PycharmProjects/untitled/miconia-model20180307")
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    saver.restore(sess, dir_path + "/miconia-model20180307")
     #saver.restore(sess, "C:\\Users\\Lindsey\\PycharmProjects\\untitled\\miconia-model")
     print("Worked?")
     # Accessing the default graph which we have restored
@@ -89,11 +91,15 @@ def main(directorys,threshold):
                 miconia = result[count][0]
                 other = result[count][1]
                 if miconia > threshold:
+                  try:
                     os.rename(rootdir + "/" + file, directory1+"/" + file)
-
+                  except:
+                    os.remove(rootdir + "/" + file,)
                 else:
-                    os.rename(rootdir + "/" + file, directory2+"/"+ file)
-
+                    try:
+                        os.rename(rootdir + "/" + file, directory2 + "/" + file)
+                    except:
+                        os.remove(rootdir + "/" + file)
                 count += 1
 
         images = []
