@@ -1,5 +1,6 @@
 from PIL import Image
 import get_lat_lon_exif_pil as gll
+import Get_lat_lon_exif_xmp as Gll
 import utm
 import os, sys
 import cv2
@@ -19,13 +20,21 @@ def main(directorys):
         os.makedirs(str(directory))
         print ("Directory made for partitions")
     f = open(str(directorys) + "/Drone_coords.txt", "w+")
+    g = open(str(directorys) + "/Drone_xmp.txt", "w+")
     files = os.listdir(rootdir)
     for file in files:
         if ".JPG" in file or ".jpg" in file:
             image = Image.open(rootdir + file)
-            exif_data = gll.get_exif_data(image)
-            dir, lat, lon = gll.get_lat_lon(exif_data)
-            f.write((file + " " + str(dir) + " "+ str(lat) + " " + str(lon) + " " + str(image.size[0]) + " " + str(image.size[1])) + str("\n"))
+
+            lat, lon, ImageW, ImageH, SensorH, SensorW, focal = Gll.process_exif(image)
+            pitch, yaw = Gll.process_xmp(str(rootdir + file))
+
+            #exif_data = gll.get_exif_data(image)
+            #dir, lat, lon = gll.get_lat_lon(exif_data)
+
+            f.write(file + " " + str(lat) + " " + str(lon) + " " + str(ImageW) + " " + str(ImageH) + " " + str(SensorW) + " " +  str(SensorH)+ " " + str(focal) +  str("\n"))
+            g.write(file + " " + str(pitch) + " " + str(yaw) + str("\n"))
+
             imgPartition = cv2.imread(rootdir + file)
             x, y, c = imgPartition.shape
             xp = len(str(x))
@@ -47,6 +56,7 @@ def main(directorys):
                 i += 300
                 j = 0
     f.close()
+    g.close()
     print("leaving image partition")
 
 if __name__ == "__main__":
