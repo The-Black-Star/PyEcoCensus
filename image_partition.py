@@ -10,6 +10,7 @@ import scipy
 import scipy.misc
 import scipy.cluster
 
+
 def main(directorys):
     print("entered image partition")
     rootdir = directorys +'/' #'/Users/bound_to_love/Downloads/Test02142018'

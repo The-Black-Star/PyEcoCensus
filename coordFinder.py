@@ -242,7 +242,6 @@ class coordFinder:
         # starting of roberto execution
         u = xcoord +150
         v = ycoord +150
-        print("X and Y", u, v)
         X_p = (1 / focal) * (SensorH / ImageH) * (TargetD) * (float(ImageH) / 2.0 - v)
         Y_p = (1 / focal) * (SensorW / ImageW) * (TargetD) * (u - float(ImageW) / 2.0)
         # perform rotation in case of near nadir

@@ -253,7 +253,6 @@ def display_images():
     image_over = 0
     ychange = -15
     files = os.listdir(positive_files)
-    print("filessssss")
     print(files)
     row_num = 5
     col_num = 0
@@ -278,7 +277,7 @@ def display_images():
             label_image.place(x=image_over, y= ychange, width=image1.size[0], height=image1.size[1])
 
             displaycanvas.create_image(50,10,image=tkpi,anchor=CENTER)
-            print("We've hit display boiiiissssss")
+
             displaycanvas.bind()
             root.title(f)
 
