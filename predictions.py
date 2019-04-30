@@ -67,7 +67,7 @@ def main(directorys,threshold):
         else:
             length = len(os.listdir(rootdir))
         for file in files[:length]:
-            if ".JPG" in file:
+            if ".JPG" in file or ".jpg" in file:
                 image = cv2.imread(rootdir+"/"+file)
                 # Reading the image using OpenCV
                 # Resizing the image to our desired size and preprocessing will be done exactly as done during training
@@ -77,16 +77,14 @@ def main(directorys,threshold):
                 image = np.multiply(image, 1.0/255.0)
                 image.reshape(1, image_size, image_size, num_channels)
                 images.append(image)
-
         #The input to the network is of shape [None image_size image_size num_channels]. Hence we reshape.
         x_batch = images
         ### Creating the feed_dict that is required to be fed to calculate y_pred
         feed_dict_testing = {x: x_batch, y_true: y_test_images}
         result=sess.run(y_pred, feed_dict=feed_dict_testing)
-
         count = 0
         for file in files[:length]:
-            if ".JPG" in file:
+            if ".JPG" in file or ".jpg" in file:
                 # result is of this format [probabiliy_of_miconia probability_of_other]
                 miconia = result[count][0]
                 other = result[count][1]
