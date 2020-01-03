@@ -1,9 +1,5 @@
 #!/user/bin/python3.5
-"""
-Image Reader
-EcoCensus
-Copyright 2017: Rebekah Loving and Morgan West
-"""
+
 
 # TODO: Find a library to read in metadata/exifdata that puts the data in a usable format.
 #   ExifRead puts the data into an unusable format that cannot be changed or manipulated and can
