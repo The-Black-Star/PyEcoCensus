@@ -1,8 +1,4 @@
 #!/user/bin/python3.5
-"""
-EcoCensus Coordinate converter
-Copyright 2017: Morgan West, Rebekah Loving, Morgan Friend
-"""
 
 import math
 import utm
