@@ -1,8 +1,3 @@
-"""
-    predictions.py
-    EcoCensus
-    Copyright 2017: Rebekah Loving
-"""
 
 import numpy as np
 from PIL import Image
